@@ -26,9 +26,10 @@ namespace FovChanger
         int fovAddress = 0x0082E128;
         int[] offsetCurrentFOV = new int[] { 0x200, 0x0, 0x28, 0x80 };
         int[] offsetCurrentDisplayedFOV = new int[] { 0x200, 0x0, 0x28, 0xC };
-        int fovAddressDX11 = 0x00671C50;
-        int[] offsetCurrentFOVDX11 = new int[] { 0x274, 0x130, 0x28, 0x80 };
-        int[] offsetCurrentDisplayFOVDX11 = new int[] { 0x274, 0x130, 0x28, 0xC };
+
+        int fovAddressDX11 = 0x0066DA28;
+        int[] offsetCurrentFOVDX11 = new int[] { 0x200, 0x0, 0x28, 0x80 };
+        int[] offsetCurrentDisplayFOVDX11 = new int[] { 0x200, 0x0, 0x28, 0xC };
 
         Keys Key = Keys.F11;
 
