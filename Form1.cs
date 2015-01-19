@@ -59,12 +59,14 @@ namespace FovChanger
             else
                 myProcess = Process.GetProcessesByName(processNameDX11);
 
-            if (myProcess.Length > 0 && !foundProcess)
+            if (myProcess.Length > 0)
             {
                 IntPtr startOffset = myProcess[0].MainModule.BaseAddress;
                 IntPtr endOffset = IntPtr.Add(startOffset, myProcess[0].MainModule.ModuleMemorySize);
                 foundProcess = true;
             }
+            else
+                foundProcess = false;
 
             if (foundProcess)
             {
@@ -82,8 +84,8 @@ namespace FovChanger
                     readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11);
                     readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11);
                 }
-
-                L_fov.Text = readFov.ToString();
+                
+                L_fov.Text = VerticalRadiansToHorizontalFOV(readFov).ToString();
 
                 if (autoMode)
                 {
@@ -103,6 +105,7 @@ namespace FovChanger
         // Used to reset all the values.
         private void ResetValues()
         {
+            L_fov.Text = "0";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -143,24 +146,31 @@ namespace FovChanger
 
         void ChangeFov()
         {
-            if (fovAddress != 0x0000000 && foundProcess)
+            if (fovAddress != 0x0000000 || fovAddressDX11 != 0x0000000 && foundProcess)
             {
                 if(isDX11==false)
                 {
                     if (readFov != fov)
-                        Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOV, fov);
+                    {
+                        Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOV, fov); 
+                        L_fov.Text = VerticalRadiansToHorizontalFOV(fov).ToString();
+                    }
                 }
                 else
                 {
                     if (readFov != fov)
+                    {
                         Trainer.WritePointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11, fov);
+                        L_fov.Text = VerticalRadiansToHorizontalFOV(fov).ToString();
+                        // MessageBox.Show("Written FOV: " + fov, "Debug", MessageBoxButtons.OK);  // For optimisation debuging
+                    }
                 }
             }
         }
 
         void ChangeDisplayedFOV()
         {
-            if (fovAddress != 0x0000000 && foundProcess)
+            if (fovAddress != 0x0000000 || fovAddressDX11 != 0x0000000 && foundProcess)
             {
                 if(isDX11==false)
                 {
@@ -175,6 +185,41 @@ namespace FovChanger
 
             }
         }
+        //////////////////////////
+        // Calculator functions //
+        //////////////////////////
+        public double ConvertToDegrees(double angle)
+        {
+            return angle * (180.0 / Math.PI);
+        }
+
+        public double ConvertToRadians(double angle)
+        {
+            return Math.PI * angle / 180.0;
+        }
+
+        public float VerticalRadiansToHorizontalFOV(float angle)
+        {
+            double dHorizontalRadians, dHorizontalFOV;
+
+            dHorizontalRadians = 2 * Math.Atan(Math.Tan(Convert.ToDouble(angle) / 2) * (4 * 1.0 / 3 * 1.0));
+            dHorizontalFOV = ConvertToDegrees(dHorizontalRadians);
+            return Convert.ToSingle(Math.Round(dHorizontalFOV, 3));
+
+        }
+
+        public float HorizontalFOVToVerticalRadians(float angle)
+        {
+            double dHorizontalRadians, dVertialRadians;
+
+            dHorizontalRadians = ConvertToRadians(Convert.ToDouble(angle));
+            dVertialRadians = 2 * Math.Atan(Math.Tan(dHorizontalRadians / 2) * (3 * 1.0 / 4 * 1.0));
+            return Convert.ToSingle(Math.Round(dVertialRadians, 3));
+        }
+        /////////////////////////////////
+        // End of calculator functions //
+        /////////////////////////////////
+
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -231,7 +276,7 @@ namespace FovChanger
             var res = 0f;
             if (float.TryParse(T_Input.Text, out res))
             {
-                fov = res;
+                fov = HorizontalFOVToVerticalRadians(res);
             }
         }
 
@@ -256,12 +301,6 @@ namespace FovChanger
                 RButton_DX9.Checked = false;
                 isDX11 = true;
             }
-        }
-
-        private void BOpenFOVCalculator_Click(object sender, EventArgs e)
-        {
-            FOVCalculator f2 = new FOVCalculator();
-            f2.ShowDialog();
         }
     }
 }

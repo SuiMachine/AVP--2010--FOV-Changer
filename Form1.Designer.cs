@@ -37,8 +37,8 @@
             this.C_AutoMode = new System.Windows.Forms.CheckBox();
             this.InputPanel = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.BOpenFOVCalculator = new System.Windows.Forms.Button();
             this.linkLabel = new System.Windows.Forms.LinkLabel();
             this.B_set = new System.Windows.Forms.Button();
             this.KeyPanel = new System.Windows.Forms.Panel();
@@ -49,16 +49,16 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.L_fov = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.InputPanel.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.KeyPanel.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // Timer
             // 
+            this.Timer.Interval = 200;
             this.Timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // LB_Running
@@ -104,7 +104,6 @@
             // 
             this.InputPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.InputPanel.Controls.Add(this.panel2);
-            this.InputPanel.Controls.Add(this.BOpenFOVCalculator);
             this.InputPanel.Controls.Add(this.linkLabel);
             this.InputPanel.Controls.Add(this.B_set);
             this.InputPanel.Controls.Add(this.KeyPanel);
@@ -126,6 +125,16 @@
             this.panel2.Size = new System.Drawing.Size(278, 139);
             this.panel2.TabIndex = 50;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::FovChanger.Properties.Resources.warning_page;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(21, 23);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 51;
+            this.pictureBox1.TabStop = false;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -134,16 +143,6 @@
             this.label4.Size = new System.Drawing.Size(248, 117);
             this.label4.TabIndex = 49;
             this.label4.Text = resources.GetString("label4.Text");
-            // 
-            // BOpenFOVCalculator
-            // 
-            this.BOpenFOVCalculator.Location = new System.Drawing.Point(145, 136);
-            this.BOpenFOVCalculator.Name = "BOpenFOVCalculator";
-            this.BOpenFOVCalculator.Size = new System.Drawing.Size(105, 23);
-            this.BOpenFOVCalculator.TabIndex = 47;
-            this.BOpenFOVCalculator.Text = "FOV Calculator";
-            this.BOpenFOVCalculator.UseVisualStyleBackColor = true;
-            this.BOpenFOVCalculator.Click += new System.EventHandler(this.BOpenFOVCalculator_Click);
             // 
             // linkLabel
             // 
@@ -253,16 +252,6 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Current Fov";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::FovChanger.Properties.Resources.warning_page;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(21, 23);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 51;
-            this.pictureBox1.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -282,11 +271,11 @@
             this.InputPanel.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.KeyPanel.ResumeLayout(false);
             this.KeyPanel.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -309,7 +298,6 @@
         private System.Windows.Forms.RadioButton RButton_DX11;
         private System.Windows.Forms.RadioButton RButton_DX9;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button BOpenFOVCalculator;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
