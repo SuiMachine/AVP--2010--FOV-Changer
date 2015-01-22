@@ -119,11 +119,11 @@ namespace FovChanger
                         readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11Alternative);
                         readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11Alternative);
                     }
-                    else if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 1)
+                    if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 1)
                     {
                         useAlternativePointer = 2;
                         readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11Alternative2, offsetCurrentFOVDX11Alternative2);
-                        readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOVAlternative2);
+                        readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressAlternative2, offsetCurrentDisplayFOVDX11Alternative2);
                     }
                 }
                 
@@ -170,7 +170,10 @@ namespace FovChanger
             else
             {
                 if (Key != Keys.None)
+                {
+                    KeyGrabber.key.Clear();
                     KeyGrabber.key.Add(Key);
+                }
             }
 
         }
