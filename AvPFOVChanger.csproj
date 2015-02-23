@@ -100,6 +100,7 @@
   <ItemGroup>
     <Content Include="avp_ico.ico" />
     <Content Include="Icon_1.ico" />
+    <None Include="Resources\donatebutton.png" />
     <None Include="Resources\warning_page.png" />
     <None Include="Resources\Bar.png" />
   </ItemGroup>
