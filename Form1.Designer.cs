@@ -48,13 +48,13 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.L_fov = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.DonateButton = new System.Windows.Forms.PictureBox();
+            this.donateButton = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.InputPanel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.KeyPanel.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DonateButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.donateButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,7 +105,7 @@
             // InputPanel
             // 
             this.InputPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.InputPanel.Controls.Add(this.DonateButton);
+            this.InputPanel.Controls.Add(this.donateButton);
             this.InputPanel.Controls.Add(this.panel2);
             this.InputPanel.Controls.Add(this.linkLabel);
             this.InputPanel.Controls.Add(this.B_set);
@@ -245,17 +245,17 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Current Fov";
             // 
-            // DonateButton
+            // donateButton
             // 
-            this.DonateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.DonateButton.Image = global::FovChanger.Properties.Resources.donatebutton;
-            this.DonateButton.Location = new System.Drawing.Point(163, 138);
-            this.DonateButton.Name = "DonateButton";
-            this.DonateButton.Size = new System.Drawing.Size(74, 21);
-            this.DonateButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.DonateButton.TabIndex = 51;
-            this.DonateButton.TabStop = false;
-            this.DonateButton.Click += new System.EventHandler(this.DonateButton_Click);
+            this.donateButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.donateButton.Image = global::FovChanger.Properties.Resources.donatebutton;
+            this.donateButton.Location = new System.Drawing.Point(148, 137);
+            this.donateButton.Name = "donateButton";
+            this.donateButton.Size = new System.Drawing.Size(74, 21);
+            this.donateButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.donateButton.TabIndex = 51;
+            this.donateButton.TabStop = false;
+            this.donateButton.Click += new System.EventHandler(this.donateButton_Click);
             // 
             // pictureBox1
             // 
@@ -290,7 +290,7 @@
             this.KeyPanel.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DonateButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.donateButton)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -317,7 +317,7 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox DonateButton;
+        private System.Windows.Forms.PictureBox donateButton;
     }
 }
 

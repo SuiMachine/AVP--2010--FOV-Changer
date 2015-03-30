@@ -69,86 +69,82 @@ namespace FovChanger
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            try 
+            try
             {
-                if (isDX11 == false)
-                    myProcess = Process.GetProcessesByName(processNameDX9);
-                else
-                    myProcess = Process.GetProcessesByName(processNameDX11);
-
-                if (myProcess.Length > 0)
                 {
-                    if(foundProcess==false)
-                        System.Threading.Thread.Sleep(10);        //A lazy way of preventing unhandled exception error
-                    foundProcess = true;
-                }
-                else
-                    foundProcess = false;
+                    if (isDX11 == false)
+                        myProcess = Process.GetProcessesByName(processNameDX9);
+                    else
+                        myProcess = Process.GetProcessesByName(processNameDX11);
 
-                if (foundProcess)
-                {
-                // The game is running, ready for memory reading.
-                    LB_Running.Text = "AvP is running";
-                    LB_Running.ForeColor = Color.Green;
-                
-                    if(isDX11==false)
+                    if (myProcess.Length > 0)
                     {
-                        readFov = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOV);
-                        readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentDisplayedFOV);
-                        useAlternativePointer = 0;
+                        if (foundProcess == false)
+                            System.Threading.Thread.Sleep(100);
+                        foundProcess = true;
+                    }
+                    else
+                        foundProcess = false;
 
-                        if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 0) //if FOV is NaN / lower than 1 / higher than 170 -> use alternative pointer
+                    if (foundProcess)
+                    {
+                        // The game is running, ready for memory reading.
+                        LB_Running.Text = "AvP is running";
+                        LB_Running.ForeColor = Color.Green;
+
+                        if (isDX11 == false)
                         {
-                            useAlternativePointer = 1;
-                            readFov = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOVAlternative);
-                            readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentDisplayedFOVAlternative);
+                            readFov = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOV);
+                            readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentDisplayedFOV);
+                            useAlternativePointer = 0;
+
+                            if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 0) //if FOV is NaN / lower than 1 / higher than 170 -> use alternative pointer
+                            {
+                                useAlternativePointer = 1;
+                                readFov = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOVAlternative);
+                                readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentDisplayedFOVAlternative);
+                            }
+                            else if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 1)
+                            {
+                                useAlternativePointer = 2;
+                                readFov = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddressAlternative2, offsetCurrentFOVAlternative2);
+                                readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddressAlternative2, offsetCurrentDisplayedFOVAlternative2);
+                            }
                         }
-                        if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 1)
+                        else
                         {
-                            useAlternativePointer = 2;
-                            readFov = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddressAlternative2, offsetCurrentFOVAlternative2);
-                            readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddressAlternative2, offsetCurrentDisplayedFOVAlternative2);
+                            readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11);
+                            readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11);
+                            useAlternativePointer = 0;
+
+                            if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 0)         //Yes, I know, this is a terrible way of doing it :|
+                            {
+                                useAlternativePointer = 1;
+                                readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11Alternative);
+                                readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11Alternative);
+                            }
+                            else if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 1)
+                            {
+                                useAlternativePointer = 2;
+                                readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11Alternative2, offsetCurrentFOVDX11Alternative2);
+                                readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOVAlternative2);
+                            }
                         }
-                        if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 2)
+
+                        L_fov.Text = VerticalRadiansToHorizontalFOV(readFov).ToString();
+
+                        if (autoMode)
                         {
-                            useAlternativePointer = 99;
-                            readFov = float.NaN;
-                            readCurrentDisplayedFOV = float.NaN;
+                            ChangeFov();
                         }
                     }
                     else
-                    { 
-                        readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11);
-                        readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11);
-                        useAlternativePointer = 0;
-
-                        if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 0)         //Yes, I know, this is a terrible way of doing it :|
-                        {
-                            useAlternativePointer = 1;
-                            readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11Alternative);
-                            readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11Alternative);
-                        }
-                        if ((Single.IsNaN(readFov) || readFov < 0.013 || readFov > 2.99) && useAlternativePointer == 1)
-                        {
-                            useAlternativePointer = 2;
-                            readFov = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressDX11Alternative2, offsetCurrentFOVDX11Alternative2);
-                            readCurrentDisplayedFOV = Trainer.ReadPointerFloat(processNameDX11, baseAddress + fovAddressAlternative2, offsetCurrentDisplayFOVDX11Alternative2);
-                        }
+                    {
+                        // The game process has not been found, reseting values.
+                        LB_Running.Text = "AvP is not running";
+                        LB_Running.ForeColor = Color.Red;
+                        ResetValues();
                     }
-                }
-                
-                L_fov.Text = VerticalRadiansToHorizontalFOV(readFov).ToString();
-
-                if (autoMode)
-                {
-                    ChangeFov();
-                }
-                else
-                {
-                    // The game process has not been found, reseting values.
-                    LB_Running.Text = "AvP is not running";
-                    LB_Running.ForeColor = Color.Red;
-                    ResetValues();
                 }
             }
             catch(Exception ex)
@@ -184,10 +180,7 @@ namespace FovChanger
             else
             {
                 if (Key != Keys.None)
-                {
-                    KeyGrabber.key.Clear();
                     KeyGrabber.key.Add(Key);
-                }
             }
 
         }
@@ -205,7 +198,7 @@ namespace FovChanger
 
         void ChangeFov()
         {
-            if (fovAddress != 0x0000000 || fovAddressDX11 != 0x0000000 && foundProcess)
+            if ((fovAddress != 0x0000000 || fovAddressDX11 != 0x0000000) && foundProcess)
             {
                 if(isDX11==false)
                 {
@@ -215,8 +208,10 @@ namespace FovChanger
                             Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOVAlternative, fov);
                         else if (useAlternativePointer == 2)
                             Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddressAlternative2, offsetCurrentFOVAlternative2, fov);
-                        else if (useAlternativePointer == 0)
-                            Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOV, fov);
+                        else if(useAlternativePointer == 0)
+                            Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentFOV, fov); 
+
+                        L_fov.Text = VerticalRadiansToHorizontalFOV(fov).ToString();
                     }
                 }
                 else
@@ -229,6 +224,8 @@ namespace FovChanger
                             Trainer.WritePointerFloat(processNameDX11, baseAddress + fovAddressDX11Alternative2, offsetCurrentFOVDX11Alternative2, fov);
                         else if (useAlternativePointer == 0)
                             Trainer.WritePointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentFOVDX11, fov);
+                        
+                        L_fov.Text = VerticalRadiansToHorizontalFOV(fov).ToString();
                     }
                 }
             }
@@ -246,7 +243,7 @@ namespace FovChanger
                             Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentDisplayedFOVAlternative, fov);
                         else if (useAlternativePointer == 2)
                             Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddressAlternative2, offsetCurrentDisplayedFOVAlternative2, fov);
-                        else if (useAlternativePointer == 0)
+                        else
                             Trainer.WritePointerFloat(processNameDX9, baseAddress + fovAddress, offsetCurrentDisplayedFOV, fov);
                     }
                 }
@@ -258,7 +255,7 @@ namespace FovChanger
                             Trainer.WritePointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11Alternative, fov);
                         else if (useAlternativePointer == 2)
                             Trainer.WritePointerFloat(processNameDX11, baseAddress + fovAddressDX11Alternative2, offsetCurrentDisplayFOVDX11Alternative2, fov);
-                        else if (useAlternativePointer == 0)
+                        else
                             Trainer.WritePointerFloat(processNameDX11, baseAddress + fovAddressDX11, offsetCurrentDisplayFOVDX11, fov);
                     }
                 }
@@ -393,7 +390,7 @@ namespace FovChanger
             }
         }
 
-        private void DonateButton_Click(object sender, EventArgs e)
+        private void donateButton_Click(object sender, EventArgs e)
         {
             Process.Start(donationUrl);
         }
