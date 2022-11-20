@@ -52,7 +52,6 @@ namespace FovChanger
         bool settingInputKey;
 
         string PCGWUrl = "http://www.pcgamingwiki.com";
-        string donationUrl = "https://www.twitchalerts.com/donate/suicidemachine";
 
 
         /*------------------
@@ -394,11 +393,6 @@ namespace FovChanger
                 RButton_DX9.Checked = false;
                 isDX11 = true;
             }
-        }
-
-        private void donateButton_Click(object sender, EventArgs e)
-        {
-            Process.Start(donationUrl);
         }
     }
 }
